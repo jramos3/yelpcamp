@@ -3,17 +3,19 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const Campground = require("./models/campground");
+const seedDB = require("./seeds");
 
+mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {
   useNewUrlParser: true
 });
+
+seedDB();
 
 const app = express();
 
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
-
-
 
 // Campground.create([
 //   {
