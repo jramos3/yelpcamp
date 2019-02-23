@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const Campground = require("./models/campground");
+const Comment = require("./models/comment");
 const seedDB = require("./seeds");
 
 mongoose.Promise = global.Promise;
@@ -17,31 +18,9 @@ const app = express();
 app.set("view engine", "ejs");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Campground.create([
-//   {
-//     name: "Salmon Creek",
-//     image:
-//       "https://cdn.pixabay.com/photo/2016/02/18/22/16/tent-1208201__340.jpg",
-//     description:
-//       "1 Lorem ipsum dolor sit amet consectetur adipisicing elit. A eius, amet eos porro reprehenderit provident hic quisquam quis voluptatibus? A molestias tempora inventore sint rerum pariatur impedit dolores est amet."
-//   },
-//   {
-//     name: "Granite Hill",
-//     image:
-//       "https://cdn.pixabay.com/photo/2016/01/19/16/48/teepee-1149402__340.jpg",
-//     description:
-//       "2 Lorem ipsum dolor sit amet consectetur adipisicing elit. A eius, amet eos porro reprehenderit provident hic quisquam quis voluptatibus? A molestias tempora inventore sint rerum pariatur impedit dolores est amet."
-//   },
-//   {
-//     name: "Mountain Goat's Rest",
-//     image:
-//       "https://cdn.pixabay.com/photo/2016/02/09/16/35/night-1189929__340.jpg",
-//     description:
-//       "3 Lorem ipsum dolor sit amet consectetur adipisicing elit. A eius, amet eos porro reprehenderit provident hic quisquam quis voluptatibus? A molestias tempora inventore sint rerum pariatur impedit dolores est amet."
-//   }
-// ])
-//   .then(campground => console.log("NEWLY CREATED CAMPGROUND: ", campground))
-//   .catch(err => console.log(err));
+//--------------------------------
+//CAMPGROUNDS Routes
+//--------------------------------
 
 app.get("/", (req, res) => {
   res.render("landing");
@@ -51,7 +30,7 @@ app.get("/", (req, res) => {
 app.get("/campgrounds", (req, res) => {
   Campground.find()
     .then(campgrounds => {
-      res.render("index", { campgrounds });
+      res.render("campgrounds/index", { campgrounds });
     })
     .catch(err => console.log(err));
 });
@@ -70,7 +49,7 @@ app.post("/campgrounds", (req, res) => {
 
 //NEW Route - Shows form to create new campground
 app.get("/campgrounds/new", (req, res) => {
-  res.render("new");
+  res.render("campgrounds/new");
 });
 
 //SHOW Route - Shows more info about one campground
@@ -78,10 +57,48 @@ app.get("/campgrounds/:id", (req, res) => {
   const { id } = req.params;
 
   Campground.findById(id)
+    .populate("comments")
+    .exec()
     .then(campground => {
-      res.render("show", { campground });
+      // console.log(campground);
+      res.render("campgrounds/show", { campground });
     })
     .catch(err => console.log(err));
+});
+
+//--------------------------------
+//COMMENTS Routes
+//--------------------------------
+
+//NEW Route
+app.get("/campgrounds/:id/comments/new", (req, res) => {
+  const { id } = req.params;
+
+  Campground.findById(id)
+    .then(campground => {
+      res.render("comments/new", { campground });
+    })
+    .catch(err => console.log(err));
+});
+
+//CREATE Route
+app.post("/campgrounds/:id/comments", (req, res) => {
+  const { id } = req.params;
+  const newComment = req.body.comment;
+
+  Promise.all([Campground.findById(id).exec(), Comment.create(newComment)])
+    .then(data => {
+      const [campground, comment] = data;
+
+      campground.comments.push(comment);
+      return campground.save();
+    })
+    .then(campground => {
+      res.redirect(`/campgrounds/${id}`);
+    })
+    .catch(err => {
+      console.log(err);
+    });
 });
 
 app.listen(3000, () => console.log("YelpCamp server started at port 3000..."));

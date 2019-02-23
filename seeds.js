@@ -58,7 +58,7 @@ const seedDB = () => {
     })
     .then(campgrounds => {
       console.log("Comment pushed on campgrounds");
-      console.log(campgrounds);
+      // console.log(campgrounds);
     })
     .catch(err => console.log(err));
 };
