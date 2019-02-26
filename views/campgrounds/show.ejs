@@ -32,7 +32,7 @@
             <% campground.comments.forEach(comment => { %>
                <div class="col-md-12">
                 <div class="d-flex justify-content-between">
-                  <p class="mb-0 font-weight-bold"><%= comment.author %></strong></p>
+                  <p class="mb-0 font-weight-bold"><%= comment.author.username %></strong></p>
                   <span>10 days ago</span>
                 </div>
                 <p class="text-justify"><%= comment.text %></p>

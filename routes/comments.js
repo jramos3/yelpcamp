@@ -26,7 +26,16 @@ router.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => {
 //CREATE Route
 router.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
   const { id } = req.params;
-  const newComment = req.body.comment;
+  const { _id, username } = req.user;
+  const text = req.body.comment.text;
+
+  const newComment = {
+    text,
+    author: {
+      id: _id,
+      username
+    }
+  };
 
   Promise.all([Campground.findById(id).exec(), Comment.create(newComment)])
     .then(data => {
