@@ -62,4 +62,32 @@ router.get("/campgrounds/:id", (req, res) => {
     .catch(err => console.log(err));
 });
 
+//EDIT Route - Shows form to update a campground
+router.get("/campgrounds/:id/edit", (req, res) => {
+  const { id } = req.params;
+
+  Campground.findById(id)
+    .then(campground => {
+      res.render("campgrounds/edit", { campground });
+    })
+    .catch(err => {
+      console.log(err);
+      res.redirect("/campgrounds");
+    });
+});
+//UPDATE Route - Updates a campground
+router.put("/campgrounds/:id", (req, res) => {
+  const { id } = req.params;
+  const { campground } = req.body;
+
+  Campground.findByIdAndUpdate(id, campground)
+    .then(updatedCampground => {
+      res.redirect(`/campgrounds/${id}`);
+    })
+    .catch(err => {
+      console.log(err);
+      res.redirect("/campgrounds");
+    });
+});
+
 module.exports = router;
