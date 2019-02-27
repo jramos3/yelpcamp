@@ -75,6 +75,7 @@ router.get("/campgrounds/:id/edit", (req, res) => {
       res.redirect("/campgrounds");
     });
 });
+
 //UPDATE Route - Updates a campground
 router.put("/campgrounds/:id", (req, res) => {
   const { id } = req.params;
@@ -83,6 +84,33 @@ router.put("/campgrounds/:id", (req, res) => {
   Campground.findByIdAndUpdate(id, campground)
     .then(updatedCampground => {
       res.redirect(`/campgrounds/${id}`);
+    })
+    .catch(err => {
+      console.log(err);
+      res.redirect("/campgrounds");
+    });
+});
+
+//DELETE Route - Deletes a campground
+router.delete("/campgrounds/:id", (req, res) => {
+  const { id } = req.params;
+
+  // Campground.findByIdAndDelete(id)
+  //   .then(campground => {
+  //     res.redirect("/campgrounds");
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //     res.redirect("/campgrounds");
+  //   });
+
+  //needs to call remove() explicitly to trigger pre remove hook on campground
+  Campground.findById(id)
+    .then(campground => {
+      return campground.remove();
+    })
+    .then(() => {
+      res.redirect("/campgrounds");
     })
     .catch(err => {
       console.log(err);
