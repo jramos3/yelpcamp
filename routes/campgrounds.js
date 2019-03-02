@@ -2,36 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Campground = require("../models/campground");
-
-//Custom Middlewares
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/login");
-};
-
-const checkCampgroundOwnership = (req, res, next) => {
-  const { id } = req.params;
-
-  if (req.isAuthenticated()) {
-    Campground.findById(id)
-      .then(campground => {
-        if (campground.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back");
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        res.redirect("back");
-      });
-  } else {
-    res.redirect("back");
-  }
-};
+const { isLoggedIn, checkCampgroundOwnership } = require("../middleware");
 
 //INDEX Route - Show all campgrounds
 router.get("/campgrounds", (req, res) => {

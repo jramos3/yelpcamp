@@ -4,14 +4,6 @@ const passport = require("passport");
 
 const User = require("../models/user");
 
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/login");
-};
-
 //Root Route
 router.get("/", (req, res) => {
   res.render("landing");

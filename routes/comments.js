@@ -3,35 +3,7 @@ const router = express.Router();
 
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
-
-//Custom Middleware
-const isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-
-  res.redirect("/login");
-};
-
-const checkCommentOwnership = (req, res, next) => {
-  const { comment_id: commentId } = req.params;
-  if (req.isAuthenticated()) {
-    Comment.findById(commentId)
-      .then(comment => {
-        if (comment.author.id.equals(req.user._id)) {
-          next();
-        } else {
-          res.redirect("back");
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        res.redirect(back);
-      });
-  } else {
-    res.redirect("back");
-  }
-};
+const { isLoggedIn, checkCommentOwnership } = require("../middleware");
 
 //NEW Route
 router.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => {
