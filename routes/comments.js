@@ -4,12 +4,33 @@ const router = express.Router();
 const Campground = require("../models/campground");
 const Comment = require("../models/comment");
 
+//Custom Middleware
 const isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {
     return next();
   }
 
   res.redirect("/login");
+};
+
+const checkCommentOwnership = (req, res, next) => {
+  const { comment_id: commentId } = req.params;
+  if (req.isAuthenticated()) {
+    Comment.findById(commentId)
+      .then(comment => {
+        if (comment.author.id.equals(req.user._id)) {
+          next();
+        } else {
+          res.redirect("back");
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        res.redirect(back);
+      });
+  } else {
+    res.redirect("back");
+  }
 };
 
 //NEW Route
@@ -53,32 +74,58 @@ router.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
 });
 
 //EDIT Route
-router.get("/campgrounds/:id/comments/:comment_id/edit", (req, res) => {
-  const { id: campgroundId, comment_id: commentId } = req.params;
+router.get(
+  "/campgrounds/:id/comments/:comment_id/edit",
+  checkCommentOwnership,
+  (req, res) => {
+    const { id: campgroundId, comment_id: commentId } = req.params;
 
-  Comment.findById(commentId)
-    .then(comment => {
-      res.render("comments/edit", { campgroundId, comment });
-    })
-    .catch(err => {
-      console.log(err);
-      res.redirect("back");
-    });
-});
+    Comment.findById(commentId)
+      .then(comment => {
+        res.render("comments/edit", { campgroundId, comment });
+      })
+      .catch(err => {
+        console.log(err);
+        res.redirect("back");
+      });
+  }
+);
 
 //UPDATE Route
-router.put("/campgrounds/:id/comments/:comment_id", (req, res) => {
-  const { id: campgroundId, comment_id: commentId } = req.params;
-  const { comment: updatedComment } = req.body;
+router.put(
+  "/campgrounds/:id/comments/:comment_id",
+  checkCommentOwnership,
+  (req, res) => {
+    const { id: campgroundId, comment_id: commentId } = req.params;
+    const { comment: updatedComment } = req.body;
 
-  Comment.findByIdAndUpdate(commentId, updatedComment)
-    .then(() => {
-      res.redirect(`/campgrounds/${campgroundId}`);
-    })
-    .catch(err => {
-      console.log(err);
-      res.redirect("back");
-    });
-});
+    Comment.findByIdAndUpdate(commentId, updatedComment)
+      .then(() => {
+        res.redirect(`/campgrounds/${campgroundId}`);
+      })
+      .catch(err => {
+        console.log(err);
+        res.redirect("back");
+      });
+  }
+);
+
+//DELETE Route
+router.delete(
+  "/campgrounds/:id/comments/:comment_id",
+  checkCommentOwnership,
+  (req, res) => {
+    const { id: campgroundId, comment_id: commentId } = req.params;
+
+    Comment.findByIdAndDelete(commentId)
+      .then(() => {
+        res.redirect(`/campgrounds/${campgroundId}`);
+      })
+      .catch(err => {
+        console.log(err);
+        res.redirect("back");
+      });
+  }
+);
 
 module.exports = router;
