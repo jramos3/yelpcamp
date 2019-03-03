@@ -26,13 +26,13 @@ router.post("/register", (req, res) => {
     .then(user => {
       passport.authenticate("local")(req, res, () => {
         req.flash("success", `Welcome to YelpCamp, ${user.username}`);
-        res.redirect("campgrounds");
+        res.redirect("/campgrounds");
       });
     })
     .catch(err => {
       console.log(err);
       req.flash("error", err.message);
-      res.render("register");
+      res.redirect("/register");
     });
 });
 
