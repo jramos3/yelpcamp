@@ -5,9 +5,8 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local");
 const session = require("express-session");
 const methodOverride = require("method-override");
+const flash = require("connect-flash");
 
-const Campground = require("./models/campground");
-const Comment = require("./models/comment");
 const User = require("./models/user");
 const seedDB = require("./seeds");
 const campgroundRoutes = require("./routes/campgrounds");
@@ -31,6 +30,7 @@ app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
+app.use(flash());
 
 //PASSPORT Config
 app.use(
@@ -48,6 +48,8 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use((req, res, next) => {
   res.locals.currentUser = req.user;
+  res.locals.successMsg = req.flash("success");
+  res.locals.errorMsg = req.flash("error");
   next();
 });
 

@@ -31,6 +31,7 @@ router.post("/campgrounds", isLoggedIn, (req, res) => {
 
   Campground.create(newCampground)
     .then(campground => {
+      req.flash("success", "Campground successfully added.");
       res.redirect("/campgrounds");
     })
     .catch(err => console.log(err));
@@ -76,6 +77,7 @@ router.put("/campgrounds/:id", checkCampgroundOwnership, (req, res) => {
 
   Campground.findByIdAndUpdate(id, campground)
     .then(updatedCampground => {
+      req.flash("success", "Campground successfully updated.");
       res.redirect(`/campgrounds/${id}`);
     })
     .catch(err => {
@@ -103,6 +105,7 @@ router.delete("/campgrounds/:id", checkCampgroundOwnership, (req, res) => {
       return campground.remove();
     })
     .then(() => {
+      req.flash("success", "Campground successfully deleted.");
       res.redirect("/campgrounds");
     })
     .catch(err => {
