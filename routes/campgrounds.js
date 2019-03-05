@@ -16,17 +16,12 @@ router.get("/campgrounds", (req, res) => {
 
 //CREATE Route - Add new campground
 router.post("/campgrounds", isLoggedIn, (req, res) => {
-  const { name, image, description } = req.body;
+  const { campground: newCampground } = req.body;
   const { _id, username } = req.user;
 
-  const newCampground = {
-    name,
-    image,
-    description,
-    author: {
-      id: _id,
-      username
-    }
+  newCampground.author = {
+    id: _id,
+    username
   };
 
   Campground.create(newCampground)
