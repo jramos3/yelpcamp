@@ -11,3 +11,11 @@ document.querySelectorAll(".deleteBtn").forEach(deleteBtn => {
     }
   });
 });
+
+document.querySelectorAll(".priceControl").forEach(priceCtrl => {
+  priceCtrl.addEventListener("blur", event => {
+    let val = event.target.value;
+    val = Math.round(val * 100) / 100;
+    event.target.value = val.toFixed(2);
+  });
+});
