@@ -51,13 +51,21 @@
     <div class="container">
       <% if(successMsg && successMsg.length > 0) { %>
         <div class="alert alert-success" role="alert">
-          <%= successMsg %>
+          <ul class="mb-0">
+            <% successMsg.forEach(message => { %>
+              <li><%= message %></li>
+            <% }) %>
+          </ul>
         </div>
       <% } %>
 
       <% if(errorMsg && errorMsg.length > 0) { %>
         <div class="alert alert-danger" role="alert">
-          <%= errorMsg %>
+          <ul class="mb-0">
+            <% errorMsg.forEach(message => { %>
+              <li><%= message %></li>
+            <% }) %>
+          </ul>
         </div>
       <% } %>
     </div>

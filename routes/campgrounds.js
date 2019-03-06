@@ -1,3 +1,5 @@
+const querystring = require("querystring");
+const url = require("url");
 const express = require("express");
 const router = express.Router();
 
@@ -29,7 +31,15 @@ router.post("/campgrounds", isLoggedIn, (req, res) => {
       req.flash("success", "Campground successfully added.");
       res.redirect("/campgrounds");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const errorMsg = Object.keys(err.errors).map(
+        key => err.errors[key].message
+      );
+
+      req.flash("inputBeforeError", newCampground); //store in session previously inputted data is any
+      req.flash("error", errorMsg);
+      res.redirect("back");
+    });
 });
 
 //NEW Route - Shows form to create new campground
@@ -45,7 +55,6 @@ router.get("/campgrounds/:id", (req, res) => {
     .populate("comments")
     .exec()
     .then(campground => {
-      // console.log(campground);
       res.render("campgrounds/show", { campground });
     })
     .catch(err => console.log(err));

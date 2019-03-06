@@ -50,6 +50,7 @@ app.use((req, res, next) => {
   res.locals.currentUser = req.user;
   res.locals.successMsg = req.flash("success");
   res.locals.errorMsg = req.flash("error");
+  res.locals.campground = req.flash("inputBeforeError")[0]; //req.flash returns an array
   next();
 });
 
