@@ -14,7 +14,11 @@
             type="text"
             name="campground[name]"
             placeholder="name"
-            value="<%= campground.name%>"
+            <% if(inputBeforeError) { %>
+              value="<%= inputBeforeError.name %>"
+            <% } else { %>
+              value="<%= campground.name%>"
+            <% } %>
           />
         </div>
         <div class="form-group">
@@ -23,7 +27,11 @@
             type="text"
             name="campground[image]"
             placeholder="image url"
-            value="<%= campground.image%>"
+            <% if(inputBeforeError) { %>
+              value="<%= inputBeforeError.image %>"
+            <% } else { %>
+              value="<%= campground.image%>"
+            <% } %>
           />
         </div>
         <div class="form-group">
@@ -34,11 +42,15 @@
             min="0"
             step="0.01"
             placeholder="Price per Night"
-            value="<%= campground.price %>"
+            <% if(inputBeforeError) { %>
+              value="<%= inputBeforeError.price %>"
+            <% } else { %>
+              value="<%= campground.price %>"
+            <% } %>
           />
         </div>
         <div class="form-group">
-          <textarea rows="4" cols="" class="form-control" placeholder="description" name="campground[description]"><%= campground.description%></textarea>
+          <textarea rows="4" cols="" class="form-control" placeholder="description" name="campground[description]"><% if(inputBeforeError) { %><%= inputBeforeError.description %><% } else { %><%= campground.description%><% } %></textarea>
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block" type="submit">
@@ -46,7 +58,7 @@
           </button>
         </div>
       </form>
-      <a href="/campgrounds">Go Back</a>
+      <a href="/campgrounds/<%= campground.id %>">Go Back</a>
     </div>
   </div>
 </div>

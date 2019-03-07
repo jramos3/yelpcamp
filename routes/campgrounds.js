@@ -79,14 +79,19 @@ router.put("/campgrounds/:id", checkCampgroundOwnership, (req, res) => {
   const { id } = req.params;
   const { campground } = req.body;
 
-  Campground.findByIdAndUpdate(id, campground)
+  Campground.findByIdAndUpdate(id, campground, { runValidators: true })
     .then(updatedCampground => {
       req.flash("success", "Campground successfully updated.");
       res.redirect(`/campgrounds/${id}`);
     })
     .catch(err => {
-      console.log(err);
-      res.redirect("/campgrounds");
+      const errorMsg = Object.keys(err.errors).map(
+        key => err.errors[key].message
+      );
+
+      req.flash("inputBeforeError", campground); //store in session previously inputted data is any
+      req.flash("error", errorMsg);
+      res.redirect("back");
     });
 });
 
