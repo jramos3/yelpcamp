@@ -14,6 +14,9 @@
             type="text"
             name="campground[name]"
             placeholder="Name"
+            <% if(inputBeforeError) { %>
+              value="<%= inputBeforeError.name %>"
+            <% } %>
           />
         </div>
         <div class="form-group">
@@ -22,6 +25,9 @@
             type="text"
             name="campground[image]"
             placeholder="Image URL"
+            <% if(inputBeforeError) { %>
+              value="<%= inputBeforeError.image %>"
+            <% } %>
           />
         </div>
         <div class="form-group">
@@ -32,10 +38,13 @@
             min="0"
             step="0.01"
             placeholder="Price per Night"
+            <% if(inputBeforeError) { %>
+              value="<%= inputBeforeError.price %>"
+            <% } %>
           />
         </div>
         <div class="form-group">
-          <textarea rows="4" cols="" class="form-control" placeholder="Description" name="campground[description]"></textarea>
+          <textarea rows="4" cols="" class="form-control" placeholder="Description" name="campground[description]"><% if(inputBeforeError) { %><%= inputBeforeError.description %><% } %></textarea>
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block" type="submit">

@@ -1,3 +1,5 @@
+const querystring = require("querystring");
+const url = require("url");
 const express = require("express");
 const router = express.Router();
 
@@ -29,7 +31,15 @@ router.post("/campgrounds", isLoggedIn, (req, res) => {
       req.flash("success", "Campground successfully added.");
       res.redirect("/campgrounds");
     })
-    .catch(err => console.log(err));
+    .catch(err => {
+      const errorMsg = Object.keys(err.errors).map(
+        key => err.errors[key].message
+      );
+
+      req.flash("inputBeforeError", newCampground); //store in session previously inputted data is any
+      req.flash("error", errorMsg);
+      res.redirect("back");
+    });
 });
 
 //NEW Route - Shows form to create new campground
@@ -45,7 +55,6 @@ router.get("/campgrounds/:id", (req, res) => {
     .populate("comments")
     .exec()
     .then(campground => {
-      // console.log(campground);
       res.render("campgrounds/show", { campground });
     })
     .catch(err => console.log(err));
@@ -70,14 +79,19 @@ router.put("/campgrounds/:id", checkCampgroundOwnership, (req, res) => {
   const { id } = req.params;
   const { campground } = req.body;
 
-  Campground.findByIdAndUpdate(id, campground)
+  Campground.findByIdAndUpdate(id, campground, { runValidators: true })
     .then(updatedCampground => {
       req.flash("success", "Campground successfully updated.");
       res.redirect(`/campgrounds/${id}`);
     })
     .catch(err => {
-      console.log(err);
-      res.redirect("/campgrounds");
+      const errorMsg = Object.keys(err.errors).map(
+        key => err.errors[key].message
+      );
+
+      req.flash("inputBeforeError", campground); //store in session previously inputted data is any
+      req.flash("error", errorMsg);
+      res.redirect("back");
     });
 });
 
