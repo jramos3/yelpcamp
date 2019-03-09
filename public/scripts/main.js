@@ -13,6 +13,13 @@ const formatToCurrency = event => {
   }
 };
 
+const trimLeadingTrailingSpaces = event => {
+  let val = event.target.value;
+
+  val = val.trim();
+  event.target.value = val;
+};
+
 document.querySelectorAll(".deleteBtn").forEach(deleteBtn => {
   deleteBtn.addEventListener("click", event => {
     if (!confirm("Are you sure you want to delete this?")) {
@@ -29,6 +36,18 @@ document.querySelectorAll(".priceControl").forEach(priceCtrl => {
   priceCtrl.addEventListener("keypress", event => {
     if (event.keyCode === 13) {
       formatToCurrency(event);
+    }
+  });
+});
+
+document.querySelectorAll("form input[type=text]").forEach(ctrl => {
+  ctrl.addEventListener("blur", trimLeadingTrailingSpaces);
+});
+
+document.querySelectorAll("form input[type=text]").forEach(ctrl => {
+  ctrl.addEventListener("keypress", event => {
+    if (event.keyCode === 13) {
+      trimLeadingTrailingSpaces(event);
     }
   });
 });
