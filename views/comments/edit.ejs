@@ -11,11 +11,20 @@
         <div class="form-group">
           <% const star = "&#xf005; " %>
           <select class="form-control" id="rating" name="comment[rating]">
-            <option value="">Rate Campground</option>
+            <option value=""
+                    <% if(inputBeforeError && inputBeforeError.rating == null) { %>
+                      selected
+                    <% } %>
+            >
+              Rate Campground</option>
             <% for(let i = 1; i <= 5; i++) { %>
               <option value="<%= i %>"
                       class="star"
-                      <% if(comment.rating === i){ %>
+                      <% if(inputBeforeError && inputBeforeError.rating != null) { %>
+                        <% if(inputBeforeError.rating == i) { %>
+                          selected
+                        <% } %>
+                      <% } else if(comment.rating === i) { %>
                         selected
                       <% } %>
               >
@@ -29,7 +38,7 @@
             class="form-control"
             name="comment[text]"
             rows="5"
-            placeholder="Enter comment here..."><%= comment.text %></textarea>
+            placeholder="Enter comment here..."><% if(inputBeforeError) { %><%= inputBeforeError.text %><% } else { %><%= comment.text %><% } %></textarea>
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block" type="submit">
