@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const _ = require("lodash");
 const Comment = require("./comment");
 
 const campgroundSchema = new mongoose.Schema({
@@ -47,6 +48,21 @@ campgroundSchema.pre("remove", function() {
     .then()
     .catch(err => console.log(err));
 });
+
+campgroundSchema.methods.computeAverageRating = function() {
+  return Comment.find({ _id: { $in: this.comments } })
+    .then(comments => {
+      return comments.map(comment => {
+        return comment.rating;
+      });
+    })
+    .then(ratings => {
+      return _.round(_.mean(ratings), 1);
+    })
+    .catch(err => {
+      console.log(err);
+    });
+};
 
 const Campground = mongoose.model("Campground", campgroundSchema);
 
