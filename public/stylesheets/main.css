@@ -1,3 +1,7 @@
 .alert ul {
   list-style: none;
 }
+
+#rating {
+  font-family: fontAwesome;
+}

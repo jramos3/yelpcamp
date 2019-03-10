@@ -9,6 +9,22 @@
     <div class="col-md-6 mx-auto mt-3">
       <form method="POST" action="/campgrounds/<%= campgroundId %>/comments/<%= comment.id%>?_method=PUT">
         <div class="form-group">
+          <% const star = "&#xf005; " %>
+          <select class="form-control" id="rating" name="comment[rating]">
+            <option value="">Rate Campground</option>
+            <% for(let i = 1; i <= 5; i++) { %>
+              <option value="<%= i %>"
+                      class="star"
+                      <% if(comment.rating === i){ %>
+                        selected
+                      <% } %>
+              >
+                <%- star.repeat(i) %>
+              </option>
+            <% } %>
+          </select>
+        </div>
+        <div class="form-group">
           <textarea
             class="form-control"
             name="comment[text]"

@@ -20,9 +20,10 @@ router.get("/campgrounds/:id/comments/new", isLoggedIn, (req, res) => {
 router.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
   const { id } = req.params;
   const { _id, username } = req.user;
-  const text = req.body.comment.text;
+  const { rating, text } = req.body.comment;
 
   const newComment = {
+    rating,
     text,
     author: {
       id: _id,
