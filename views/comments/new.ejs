@@ -9,13 +9,12 @@
     <div class="col-md-6 mx-auto mt-3">
       <form method="POST" action="/campgrounds/<%= campground._id %>/comments">
         <div class="form-group">
+          <% const star = "&#xf005; " %>
           <select class="form-control" id="rating" name="comment[rating]">
             <option value="">Rate Campground</option>
-            <option value="1" class="star">&#xf005;</option>
-            <option value="2" class="star">&#xf005; &#xf005;</option>
-            <option value="3" class="star">&#xf005; &#xf005;  &#xf005;</option>
-            <option value="4" class="star">&#xf005; &#xf005; &#xf005; &#xf005;</option>
-            <option value="5" class="star">&#xf005; &#xf005; &#xf005; &#xf005;  &#xf005;</option>
+            <% for(let i = 1; i <= 5; i++) { %>
+              <option value="<%= i %>" class="star"><%- star.repeat(i) %></option>
+            <% } %>
           </select>
         </div>
         <div class="form-group">
