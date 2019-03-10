@@ -43,7 +43,13 @@ router.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
       res.redirect(`/campgrounds/${id}`);
     })
     .catch(err => {
-      console.log(err);
+      const errorMsg = Object.keys(err.errors).map(
+        key => err.errors[key].message
+      );
+
+      req.flash("inputBeforeError", newComment); //store in session previously inputted data if any
+      req.flash("error", errorMsg);
+      res.redirect("back");
     });
 });
 
@@ -73,13 +79,21 @@ router.put(
     const { id: campgroundId, comment_id: commentId } = req.params;
     const { comment: updatedComment } = req.body;
 
-    Comment.findByIdAndUpdate(commentId, updatedComment)
+    Comment.findByIdAndUpdate(commentId, updatedComment, {
+      runValidators: true
+    })
       .then(() => {
         req.flash("success", "Comment successfully updated.");
         res.redirect(`/campgrounds/${campgroundId}`);
       })
       .catch(err => {
-        console.log(err);
+        const errorMsg = Object.keys(err.errors).map(
+          key => err.errors[key].message
+        );
+
+        req.flash("inputBeforeError", updatedComment); //store in session previously inputted data if any
+        req.flash("error", errorMsg);
+        console.log(res.locals);
         res.redirect("back");
       });
   }
