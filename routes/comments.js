@@ -43,7 +43,13 @@ router.post("/campgrounds/:id/comments", isLoggedIn, (req, res) => {
       res.redirect(`/campgrounds/${id}`);
     })
     .catch(err => {
-      console.log(err);
+      const errorMsg = Object.keys(err.errors).map(
+        key => err.errors[key].message
+      );
+
+      req.flash("inputBeforeError", newComment); //store in session previously inputted data is any
+      req.flash("error", errorMsg);
+      res.redirect("back");
     });
 });
 

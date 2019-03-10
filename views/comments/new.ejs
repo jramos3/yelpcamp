@@ -13,7 +13,15 @@
           <select class="form-control" id="rating" name="comment[rating]">
             <option value="">Rate Campground</option>
             <% for(let i = 1; i <= 5; i++) { %>
-              <option value="<%= i %>" class="star"><%- star.repeat(i) %></option>
+              <option
+                value="<%= i %>"
+                class="star"
+                <% if(inputBeforeError && Number(inputBeforeError.rating) === i) { %>
+                  selected
+                <% } %>
+              >
+                  <%- star.repeat(i) %>
+              </option>
             <% } %>
           </select>
         </div>
@@ -22,7 +30,7 @@
             class="form-control"
             name="comment[text]"
             rows="5"
-            placeholder="Enter comment here..."></textarea>
+            placeholder="Enter comment here..."><% if(inputBeforeError) { %><%= inputBeforeError.text %><% } %></textarea>
         </div>
         <div class="form-group">
           <button class="btn btn-primary btn-block" type="submit">
