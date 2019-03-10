@@ -93,7 +93,6 @@ router.put(
 
         req.flash("inputBeforeError", updatedComment); //store in session previously inputted data if any
         req.flash("error", errorMsg);
-        console.log(res.locals);
         res.redirect("back");
       });
   }
