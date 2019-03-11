@@ -55,6 +55,12 @@ router.get("/campgrounds/:id", (req, res) => {
     .populate("comments")
     .exec()
     .then(campground => {
+      return Promise.all([campground.computeAverageRating(), campground]);
+    })
+    .then(data => {
+      const [averageRating, campground] = data;
+
+      console.log(averageRating);
       res.render("campgrounds/show", { campground });
     })
     .catch(err => console.log(err));
