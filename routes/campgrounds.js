@@ -59,9 +59,9 @@ router.get("/campgrounds/:id", (req, res) => {
     })
     .then(data => {
       const [averageRating, campground] = data;
+      const starPercentage = `${(averageRating / 5) * 100}%`
 
-      console.log(averageRating);
-      res.render("campgrounds/show", { campground });
+      res.render("campgrounds/show", { campground, averageRating, starPercentage });
     })
     .catch(err => console.log(err));
 });

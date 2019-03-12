@@ -19,6 +19,13 @@
             <h4><a href=""><%= campground.name %></a></h4>
             <h4 class="text-right">$<%= campground.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>/night</h4>
           </div>
+          <div class="star-ratings d-flex align-items-center">
+            <div class="stars-outer">
+              <div class="stars-inner" data-starPercentage="<%= starPercentage %>"></div>
+            </div>
+            <span class="stars-average font-weight-bold"><%= averageRating %></span>
+            <span>(<%= campground.comments.length %>)</span>
+          </div>
           <p class="card-text text-justify"><%= campground.description %></p>
           <p><em>Submitted By <%= campground.author.username%></em></p>
           <% if(currentUser && campground.author.id.equals(currentUser._id)) {%>
