@@ -57,6 +57,10 @@ campgroundSchema.methods.computeAverageRating = function() {
       });
     })
     .then(ratings => {
+      if (ratings.length === 0) {
+        return 0;
+      }
+
       return _.round(_.mean(ratings), 1);
     })
     .catch(err => {
