@@ -21,12 +21,17 @@ const trimLeadingTrailingSpaces = event => {
 };
 
 const displayStarRating = () => {
-  const innerStar = document.querySelector(".stars-inner");
-  const starPercentage = document
-    .querySelector(".stars-inner")
-    .getAttribute("data-starPercentage");
+  document.querySelectorAll(".stars-inner").forEach(innerStar => {
+    const starPercentage = innerStar.getAttribute("data-starPercentage");
+    innerStar.style.width = starPercentage;
+  });
 
-  innerStar.style.width = starPercentage;
+  // const innerStar = document.querySelector(".stars-inner");
+  // const starPercentage = document
+  //   .querySelector(".stars-inner")
+  //   .getAttribute("data-starPercentage");
+
+  // innerStar.style.width = starPercentage;
 };
 
 document.querySelectorAll(".deleteBtn").forEach(deleteBtn => {

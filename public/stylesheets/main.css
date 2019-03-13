@@ -29,13 +29,13 @@
 .stars-outer::before {
   content: "\f005 \f005 \f005 \f005 \f005";
   font-family: fontAwesome;
-  font-size: 25px;
+  font-size: 23px;
   color: #ccc;
 }
 
 .stars-inner::before {
   content: "\f005 \f005 \f005 \f005 \f005";
   font-family: fontAwesome;
-  font-size: 25px;
+  font-size: 23px;
   color: #f8ce0b;
 }
