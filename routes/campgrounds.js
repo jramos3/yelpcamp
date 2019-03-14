@@ -2,6 +2,7 @@ const querystring = require("querystring");
 const url = require("url");
 const express = require("express");
 const router = express.Router();
+const moment = require("moment");
 
 const Campground = require("../models/campground");
 const { isLoggedIn, checkCampgroundOwnership } = require("../middleware");
@@ -84,9 +85,21 @@ router.get("/campgrounds/:id", (req, res) => {
     .then(data => {
       const [averageRating, campground] = data;
       const starPercentage = `${(averageRating / 5) * 100}%`;
+      //converts campground and comments to plain JS object to add props
+      //before passing to view
+      const commentObj = campground.comments.map(comment => {
+        return comment.toObject();
+      });
+      const campgroundObj = campground.toObject();
+
+      commentObj.forEach(comment => {
+        comment.relativeDateFromNow = moment(comment.updatedAt).fromNow();
+      });
+
+      campgroundObj.comments = commentObj;
 
       res.render("campgrounds/show", {
-        campground,
+        campground: campgroundObj,
         averageRating,
         starPercentage
       });
