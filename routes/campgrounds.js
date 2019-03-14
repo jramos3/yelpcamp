@@ -34,7 +34,7 @@ router.get("/campgrounds", (req, res) => {
         campground.averageRating = ratings[i];
         campground.starPercentage = `${(campground.averageRating / 5) * 100}%`;
       });
-      console.log(campgroundObjects);
+
       res.render("campgrounds/index", { campgrounds: campgroundObjects });
     })
     .catch(err => console.log(err));
