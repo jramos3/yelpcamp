@@ -20,6 +20,20 @@ const trimLeadingTrailingSpaces = event => {
   event.target.value = val;
 };
 
+const displayStarRating = () => {
+  document.querySelectorAll(".stars-inner").forEach(innerStar => {
+    const starPercentage = innerStar.getAttribute("data-starPercentage");
+    innerStar.style.width = starPercentage;
+  });
+
+  // const innerStar = document.querySelector(".stars-inner");
+  // const starPercentage = document
+  //   .querySelector(".stars-inner")
+  //   .getAttribute("data-starPercentage");
+
+  // innerStar.style.width = starPercentage;
+};
+
 document.querySelectorAll(".deleteBtn").forEach(deleteBtn => {
   deleteBtn.addEventListener("click", event => {
     if (!confirm("Are you sure you want to delete this?")) {
@@ -51,3 +65,5 @@ document.querySelectorAll("form input[type=text]").forEach(ctrl => {
     }
   });
 });
+
+document.addEventListener("DOMContentLoaded", displayStarRating);

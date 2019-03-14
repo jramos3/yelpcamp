@@ -11,7 +11,31 @@ router.get("/campgrounds", (req, res) => {
   // console.log(req.user);
   Campground.find()
     .then(campgrounds => {
-      res.render("campgrounds/index", { campgrounds });
+      const ratings = campgrounds.map(campground => {
+        return campground.computeAverageRating(); //promise
+      });
+      const ratingsAndCampgrounds = [ratings, campgrounds];
+
+      return Promise.all(
+        ratingsAndCampgrounds.map(ratingAndCampground => {
+          return Promise.all(ratingAndCampground);
+        })
+      );
+    })
+    .then(data => {
+      const [ratings, campgrounds] = data;
+      //converts the array of mongoose objects to plain javascript objects
+      //so that we can add properties onto it
+      const campgroundObjects = campgrounds.map(campground =>
+        campground.toObject()
+      );
+
+      campgroundObjects.forEach((campground, i) => {
+        campground.averageRating = ratings[i];
+        campground.starPercentage = `${(campground.averageRating / 5) * 100}%`;
+      });
+      console.log(campgroundObjects);
+      res.render("campgrounds/index", { campgrounds: campgroundObjects });
     })
     .catch(err => console.log(err));
 });
@@ -59,9 +83,13 @@ router.get("/campgrounds/:id", (req, res) => {
     })
     .then(data => {
       const [averageRating, campground] = data;
+      const starPercentage = `${(averageRating / 5) * 100}%`;
 
-      console.log(averageRating);
-      res.render("campgrounds/show", { campground });
+      res.render("campgrounds/show", {
+        campground,
+        averageRating,
+        starPercentage
+      });
     })
     .catch(err => console.log(err));
 });
