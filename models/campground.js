@@ -2,41 +2,44 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 const Comment = require("./comment");
 
-const campgroundSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, "Campground Name is required."],
-    trim: true
-  },
-  image: {
-    type: String,
-    required: [true, "Campground Image is required."],
-    trim: true
-  },
-  price: {
-    type: Number,
-    required: [true, "Campground Price is required."],
-    trim: true
-  },
-  description: {
-    type: String,
-    required: [true, "Campground Description is required."],
-    trim: true
-  },
-  author: {
-    id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+const campgroundSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, "Campground Name is required."],
+      trim: true
     },
-    username: String
+    image: {
+      type: String,
+      required: [true, "Campground Image is required."],
+      trim: true
+    },
+    price: {
+      type: Number,
+      required: [true, "Campground Price is required."],
+      trim: true
+    },
+    description: {
+      type: String,
+      required: [true, "Campground Description is required."],
+      trim: true
+    },
+    author: {
+      id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
+      },
+      username: String
+    },
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Comment"
+      }
+    ]
   },
-  comments: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Comment"
-    }
-  ]
-});
+  { timestamps: true }
+);
 
 //deletes associated comments on a campground before deleting it
 campgroundSchema.pre("remove", function() {
