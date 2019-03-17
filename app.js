@@ -12,6 +12,10 @@ const seedDB = require("./seeds");
 const campgroundRoutes = require("./routes/campgrounds");
 const commentRoutes = require("./routes/comments");
 const authRoutes = require("./routes/index");
+const {
+  getRelativeDateFromNow,
+  getStarPercentage
+} = require("./utils/helpers");
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb://localhost:27017/yelpcamp", {
@@ -21,6 +25,10 @@ mongoose.connect("mongodb://localhost:27017/yelpcamp", {
 // seedDB();
 
 const app = express();
+
+//EJS helper functions
+app.locals.getRelativeDateFromNow = getRelativeDateFromNow;
+app.locals.getStarPercentage = getStarPercentage;
 
 //--------------------------------
 //MIDDLEWARES

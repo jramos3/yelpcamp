@@ -21,7 +21,7 @@
           </div>
           <div class="star-ratings d-flex align-items-center">
             <div class="stars-outer">
-              <div class="stars-inner" data-starPercentage="<%= starPercentage %>"></div>
+              <div class="stars-inner" data-starPercentage="<%= getStarPercentage(averageRating) %>"></div>
             </div>
             <span class="stars-average font-weight-bold"><%= averageRating %></span>
             <span>(<%= campground.comments.length %>)</span>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <p class="mb-0 font-weight-bold"><%= comment.author.username %></strong></p>
-                  <span>10 days ago</span>
+                  <span><%= getRelativeDateFromNow(comment.updatedAt) %></span>
                 </div>
                 <p class="text-justify"><%= comment.text %></p>
                 <% if(currentUser && comment.author.id.equals(currentUser._id)) { %>

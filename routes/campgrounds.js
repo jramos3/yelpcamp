@@ -32,9 +32,8 @@ router.get("/campgrounds", (req, res) => {
 
       campgroundObjects.forEach((campground, i) => {
         campground.averageRating = ratings[i];
-        campground.starPercentage = `${(campground.averageRating / 5) * 100}%`;
       });
-      console.log(campgroundObjects);
+
       res.render("campgrounds/index", { campgrounds: campgroundObjects });
     })
     .catch(err => console.log(err));
@@ -83,12 +82,10 @@ router.get("/campgrounds/:id", (req, res) => {
     })
     .then(data => {
       const [averageRating, campground] = data;
-      const starPercentage = `${(averageRating / 5) * 100}%`;
 
       res.render("campgrounds/show", {
         campground,
-        averageRating,
-        starPercentage
+        averageRating
       });
     })
     .catch(err => console.log(err));

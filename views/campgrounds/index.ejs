@@ -28,7 +28,7 @@
               <h4><%= campground.name %></h4>
               <div class="star-ratings d-flex align-items-center justify-content-center">
                 <div class="stars-outer">
-                  <div class="stars-inner" data-starPercentage="<%= campground.starPercentage %>"></div>
+                  <div class="stars-inner" data-starPercentage="<%= getStarPercentage(campground.averageRating) %>"></div>
                 </div>
                 <span class="stars-average font-weight-bold"><%= campground.averageRating %></span>
                 <span>(<%= campground.comments.length %>)</span>
